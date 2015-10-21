@@ -1,7 +1,4 @@
-# 如何部署企业内部Registry仓库（带SSL证书）
-
 > 企业使用docker技术以后，不管是快速生成环境还是交付产品，效率都是得到了很大的提升。镜像仓库（Registry）在传输镜像的过程中起非常重要的作用，那么企业构建自己内部的私有Registry是必须执行的任务。
-
 
 部署Registry镜像仓库非常简单，如果要是配置用户认证和添加SSL证书，网上查到的解决办法大多都需要用到nginx，对于Registry V2版本简化了部署。 
 
@@ -17,8 +14,6 @@
 
 > Registry镜像的**volume目录**已发生变化：`/tmp`-->`/var/lib/registry`
 
-不过对于Registry真是醉了，旧的问题解决了，又引来了新的问题！不要问我新问题是神马，你要自己去发现！
-
 ## 构建私有Registry
 
 **下载官方Registry镜像**
@@ -27,7 +22,7 @@
 
 ## 生成证书
 
-**通过openssl命令生产证书，比如域名是reg.domain.com**
+**通过openssl命令生成证书，比如域名是`reg.domain.com`**
 
 `mkdir certs`
 
