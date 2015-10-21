@@ -5,11 +5,14 @@
 
 部署Registry镜像仓库非常简单，如果要是配置用户认证和添加SSL证书，网上查到的解决办法大多都需要用到nginx，对于Registry V2版本简化了部署。 
 
-V2对于V1的一些变化：
+**V2对于V1的一些变化：**
 
 1.Go替换Python
+
 2.镜像下载上传效率提升
+
 3.内嵌webhook
+
 4.部署简化
 
 > Registry镜像的**volume目录**已发生变化：`/tmp`-->`/var/lib/registry`
@@ -27,6 +30,7 @@ V2对于V1的一些变化：
 **通过openssl命令生产证书，比如域名是reg.domain.com**
 
 `mkdir certs`
+
 `openssl req -x509 -days 3650 -subj '/CN=reg.domain.com/' -nodes -newkey rsa:2048 -keyout registry.key -out registry.crt`
 
 ## 生成密码
@@ -34,6 +38,7 @@ V2对于V1的一些变化：
 **从本地push镜像到官方Hub，需要用户认证。实现从本地到私有Hub push也需要用户认证**
 
 `mkdir auth`
+
 `docker run --entrypoint htpasswd registry:2 -Bbn testuser password > auth/htpasswd`
 
 > `$testuser` `$password` 随便设置 
@@ -71,6 +76,7 @@ Registry启动在A主机：192.168.1.100
 B主机pull Registry镜像，在B主机上操作：
 
 添加`/etc/hosts/`
+
 `192.168.1.100 reg.domain.com`
 
 注：已作DNS无需此操作！
@@ -82,7 +88,9 @@ B主机pull Registry镜像，在B主机上操作：
 A,B主机执行命令一样：
 
 1.`docker login reg.domain.com:5000`
+
 2.`docker tag busybox reg.domain.com:5000/busybox`
+
 3.`docker push reg.domain.com:5000/busybox`
 
 
