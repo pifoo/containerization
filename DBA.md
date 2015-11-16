@@ -31,7 +31,7 @@ docker中文意思是码头工人，他的职责应该是管理**集装箱**--�
 
 1.可以提升研发和测试的效率，生成运行环境更容易
 
-2.更容易实现devopts
+2.更容易实现devops
 
 3.研发以镜像作为交付，让环境一致化
 
@@ -81,7 +81,21 @@ docker就是C/S架构
 
 ![Dockerfile](https://discuss.csphere.cn/uploads/default/original/2X/e/e1f44504650fd44fe781ffe017a497d2c8e8cd17.jpg)
 
-看图理解它们之间的关系，不再过多描述
+1.首先我们从dockerhub官方镜像仓库中往下`pull`一个基础镜像`centos`
+
+2.然后写一个Dockerfile文件，基于基础镜像`centos`来构建其他镜像
+
+3.然后通过`docker build`命令来构建镜像
+
+4.构建镜像完成以后，我们可以通过`docker run`命令来启动容器
+
+5.然后我们可以对容器进行`start,stop,restart，rm`等等操作
+
+6.也可以把一个容器`commit`成一个镜像
+
+7.最后可以把自己构建的镜像`push`到镜像仓库，可供其他人下载使用
+
+> 推荐构建镜像的时候通过Dockerfile来进行`build`,除非图形界面操作太多的情况，可以使用把容器`commit`成镜像
 
 ### docker存储
 
