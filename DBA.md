@@ -65,7 +65,7 @@ docker中文意思是码头工人，他的职责应该是管理**集装箱**--�
 
 下图是6个namespace所实现功能的列表：：
 
-![namespace](https://discuss.csphere.cn/uploads/default/optimized/2X/1/17c62bd4ef148704072466f54b20dbc54f83c7fa_1_690x451.jpg)
+![namespace](https://discuss.csphere.cn/uploads/default/original/2X/4/4f4130bfd9a7e35f9c1492fc618ef612cfa41c4a.jpg)
 
 ### docker架构
 
