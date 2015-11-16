@@ -41,6 +41,8 @@ docker中文意思是码头工人，他的职责应该是管理**集装箱**--�
 
 ...等等优势
 
+![packaging](https://discuss.csphere.cn/uploads/default/original/2X/0/0639d776d83a52bd0ac87e737d95fc4cc1d0d597.jpg)
+
 ### 什么是docker，给企业带来哪些价值？
 
 以上的优势都是由·linux内核和cgroup带来的。docker是基于linux内核的虚拟化技术，所以对系统的内核版本有要求，是因为低版本的内核不支持namespace，因为共用宿主机内核，所以容器container的性能接近于native的性能。通过5大namesapce实现了运行环境的隔离(第6个user namespace现在已在试验版本中)，又通过cgroup实现了资源限制。
