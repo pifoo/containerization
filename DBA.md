@@ -85,7 +85,7 @@ docker就是C/S架构
 
 2.然后写一个Dockerfile文件，基于基础镜像`centos`来构建其他镜像
 
-3.然后通过`docker build`命令来构建镜像
+3.然后通过`docker build`命令进行加载Dockerfile文件中的内容，构建镜像
 
 4.构建镜像完成以后，我们可以通过`docker run`命令来启动容器
 
