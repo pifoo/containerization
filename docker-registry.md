@@ -54,21 +54,25 @@ v2版本，镜像ID是通过sha256做hash得出来的，这样一来同样的内
 
 创建目录：
 
-`mkdir registry && cd registry && mkdir certs && cd certs`
-
-`openssl req -x509 -days 3650 -subj '/CN=reg.carson.com/' -nodes -newkey rsa:2048 -keyout registry.key -out registry.crt`
+```
+mkdir registry && cd registry && mkdir certs && cd certs
+openssl req -x509 -days 3650 -subj '/CN=reg.carson.com/' -nodes -newkey rsa:2048 -keyout registry.key -out registry.crt
+```
 
 3.生成用户和密码
 
-`cd .. && mkdir auth`
-
-`docker run --entrypoint htpasswd registry:2.2 -Bbn testuser password > auth/htpasswd`
+```
+cd .. && mkdir auth
+docker run --entrypoint htpasswd registry:2.2 -Bbn testuser password > auth/htpasswd
+```
 
 > 用户：testuser  密码：password 可随便填写自己想填写的
 
 4.启动registry server
 
-`docker run -d –p 5000:5000 --restart=always --name registry -v `pwd`/auth:/auth -e "REGISTRY_AUTH=htpasswd" -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd -v `pwd`/certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt -e REGISTRY_HTTP_TLS_KEY=/certs/registry.key -v /data:/var/lib/registry registry:2.2 `
+```
+docker run -d –p 5000:5000 --restart=always --name registry -v `pwd`/auth:/auth -e "REGISTRY_AUTH=htpasswd" -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd -v `pwd`/certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt -e REGISTRY_HTTP_TLS_KEY=/certs/registry.key -v /data:/var/lib/registry registry:2.2
+```
 
 > 确认registry server是`UP`状态，`docker ps -a | grep registry`
 
