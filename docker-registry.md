@@ -48,7 +48,9 @@ v2版本，镜像ID是通过sha256做hash得出来的，这样一来同样的内
 
 1.下载registry2.2镜像
 
-`docker pull registry:2.2`
+```
+docker pull registry:2.2
+```
 
 2.生成自签名证书，如果是购买的证书就不用了，直接用购买的证书即可。假如域名是：`reg.carson.com`
 
@@ -82,42 +84,60 @@ docker run -d –p 5000:5000 --restart=always --name registry -v `pwd`/auth:/aut
 
 1.创建证书目录(没有此目录自己创建，注意端口号)
 
-`mkdir -p /etc/docker/certs.d/reg.carson.com:5000`
+```
+mkdir -p /etc/docker/certs.d/reg.carson.com:5000
+```
 
 2.下载证书
 
-`cp /certs/registry.crt /etc/docker/certs.d/reg.carson.com:5000`
+```
+cp /certs/registry.crt /etc/docker/certs.d/reg.carson.com:5000
+```
 
 3.域名解析,如果有DNS解析无需做此步骤（registry-server-ip=192.168.1.10）
 
-`echo 192.168.1.10 reg.carson.com >> /etc/hosts`
+```
+echo 192.168.1.10 reg.carson.com >> /etc/hosts
+```
 
 其他主机配置：
 
 1.创建证书目录(没有此目录自己创建，注意端口号)
 
-`mkdir -p /etc/docker/certs.d/reg.carson.com:5000`
+```
+mkdir -p /etc/docker/certs.d/reg.carson.com:5000
+```
 
 2.下载证书
 
-`scp -r root@192.168.1.10:~/registry/certs/registry.crt /etc/docker/certs.d/reg.carson.com:5000`
+```
+scp -r root@192.168.1.10:~/registry/certs/registry.crt /etc/docker/certs.d/reg.carson.com:5000
+```
 
 3.域名解析,如果有DNS解析无需做此步骤（registry-server-ip=192.168.1.10）
 
-`echo 192.168.1.10 reg.carson.com >> /etc/hosts`
+```
+echo 192.168.1.10 reg.carson.com >> /etc/hosts
+```
 
 ## 验证测试
 
 1.登陆(注意加端口号)
 
-`docker login reg.carson.com:5000`
+```
+docker login reg.carson.com:5000
+```
 
 2.输入用户testuser，密码password以及邮箱
 
 3.更改镜像`tag`
 
-`docker tag busybox reg.carson.com:5000/busybox:1.0`
+```
+docker tag busybox reg.carson.com:5000/busybox:1.0
+```
 
 4.`push`镜像
 
-`docker push reg.carson.com:5000/busybox:1.0`
+```
+docker push reg.carson.com:5000/busybox:1.0
+```
