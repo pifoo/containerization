@@ -34,7 +34,7 @@
 
 `mkdir auth`
 
-`docker run --entrypoint htpasswd registry:2 -Bbn testuser password > auth/htpasswd`
+`docker run --entrypoint htpasswd registry:2.1.1 -Bbn testuser password > auth/htpasswd`
 
 > `$testuser` `$password` 随便设置 
 
