@@ -133,6 +133,7 @@ CMD ["param1", "param2"]
 |CMD exec_cmd p1_cmd|/bin/sh -c exec_cmd p1_cmd|/bin/sh -c exec_entry p1_entry /bin/sh -c exec_cmd p1_cmd|exec_entry p1_entry /bin/sh -c exec_cmd p1_cmd
  ```
 
+
 ## ONBUILD
 
 格式：`ONBUILD [INSTRUCTION]`
