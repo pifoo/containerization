@@ -3,7 +3,7 @@ docker可以通过build命令自动从Dockerfile文件中读取并执行命令�
 
 # [Dockerfile](http://docs.docker.com/reference/builder/)命令详解
 
-写文章时docker版本号为：1.8.2 目前Dockerfile中共包含14个命令，文章内容详细介绍每个一个命令的**含义**和**用法**
+写文章时docker版本号为：v1.11.1-rc1 目前Dockerfile中共包含16个命令，文章内容详细介绍每个一个命令的**含义**和**用法**
 
 ## Dockerfile
 
@@ -18,7 +18,8 @@ instruction 不区分大小写，推荐用大写，以免和其他参数冲突
 - `FROM \<image\>:\<tag\>`
 - `FROM \<image\>@\<digest\>`
 
-Dockerfile中的第一条指令必须是FROM，FROM指令指定了构建镜像的base镜像
+Dockerfile中的第一条指令必须是FROM，FROM指令指定了构建镜像的base镜像。
+`tag` or `digest`的值如果没有指定默认是latest. 
 
 ## MAINTAINER
 
@@ -32,22 +33,45 @@ Dockerfile中的第一条指令必须是FROM，FROM指令指定了构建镜像�
 - `ENV \<key\>\<value\>`
 - `ENV \<key\>=\<value\>`
 
+在Dockerfile中如果有设置变量，可以直接调用；
+
+> ${variable:-word} 如果没有给变量赋值，则变量的值默认为word
+> ${variable:+word} 如果设置了变量的值，则word被覆盖，否则为空字符。
+*注：环境变量转义使用\,如\$cSphere or \${cSphere}
+
+```
+FROM microimages/alpine
+ENV docker /cSphere
+WORKDIR ${docker}  # WORKDIR /cSphere
+ADD . $docker      # ADD . /cSphere
+COPY \$docker /carson # COPY $docker /carson
+```
+
 为容器声明环境变量，环境变量在子镜像中也可以使用。可以直接使用环境变量$variable_name
 运行容器指定环境变量：`docker run --env <key>=<value>`
 
+环境变量在以下命令中都可以使用：
+`ADD COPY ENV EXPOSE LABEL USER WORKDIR VOLUME STOPSIGNAl`
+
 ## RUN
 
-格式：
+`RUN`有2种格式：
 - `RUN \<command\>` (类似`/bin/sh -c`shell格式)
 
 - `RUN ["executable", "param1", "param2"]` (exec格式)
 
 **第一种** 使用shell格式时，命令通过`/bin/sh -c`执行; 
+
 **第二种** 使用`exec`格式时，命令直接执行，容器不调用shell，并且`exec`格式中的参数会看作是`JSON`数组被Docker解析，所以要用(")双引号，不能用单引号(')。
 
 举例：
 `RUN [ "echo", "$HOME" ]`$HOME变量不会被替换,如果你想运行shell程序，使用：`RUN [ "sh", "-c", "echo", "$HOME" ]`
 
+*注: 因为每执行一个Dockerfile的指令都会生成一个layer，所以在执行RUN的时候，一件事最好能在一个RUN中完成，例如：
+```
+RUN /bin/bash -c 'source $HOME/.bashrc ;\
+echo $HOME'
+```
 
 ## COPY
 
@@ -63,10 +87,11 @@ Dockerfile中的第一条指令必须是FROM，FROM指令指定了构建镜像�
 
 `ADD hom* /mydir/`
 从\<src\>目录下拷贝文件，目录或网络文件到容器的\<dest\>目录。和COPY非常相似，但比COPY功能多，拷贝的文件可以是一个网络文件，并且ADD有解压文件得功能。
+*注：如果URL文件使用了authentication，请使用`RUN wget`,`RUN curl`,`ADD`不支持authentication。
 
 ## CMD
 
-格式：
+`CMD`有3种格式：
 
 - `CMD \<commadn\> param1 param2`(shell格式)
 - `CMD ["executable", "param1", "param2"]` （exex格式）
@@ -87,7 +112,7 @@ CMD ["param1", "param2"]
 
 ## ENTRYPOINT
 
-格式：
+`ENTERPOINT`有2种格式：
 - `ENTRYPOINT \<command\>` (shell格式)
 - `ENTRYPOINT ["executable", "param1", "param2"]`（exec格式）
 
@@ -120,7 +145,7 @@ CMD ["param1", "param2"]
 
 格式：`LABEL <key>=<value> <key>=<value> <key>=<value> ...`
 
-LABEL指令，添加一个元数据到镜像中。一个镜像中可以有多个标签，建议写一个（因为没多个LABEL指令镜像会多一个`layer`）`LABEL`是一个键值对\<key\>\<value\>，在一个标签值,包括空间使用引号和反斜杠作为您在命令行解析。
+LABEL指令，添加一个元数据到镜像中。一个镜像中可以有多个标签，建议写一个（因为每多个LABEL指令镜像会多一个`layer`）`LABEL`是一个键值对\<key\>\<value\>，在一个标签值,包括空间使用引号和反斜杠作为您在命令行解析。
 举例：
 `LABEL multi.label1="value1" multi.label2="value2" other="value3"`
 
@@ -135,11 +160,34 @@ LABEL指令，添加一个元数据到镜像中。一个镜像中可以有多个
 
 设定一个用户或者用户ID,在执行`RUN``CMD``ENTRYPOINT`等指令时指定以那个用户得身份去执行
 
+## ARG
+
+格式：`ARG <name>[=<default value>]`
+
+`ARG`定义一个变量，用户可以在执行`docker build`命令时使用`--build-arg <varname>=<value>`,如果用户指定的参数不是在`Dockerfile`中定义的，则输出以下错误信息：`One or more build-args were not consumed,failing build.`
+
+例子：
+```
+FROM microimages/alpine
+ARG CONT_IMG_VER
+ENV CONT_IMG_VER v1.0.0
+RUN echo $CONT_IMG_VER
+```
+构建镜像`docker build --build-arg CONT_IMG_VER=v2.0.1 Dockerfile`
+
+在Dockerfile中`RUN`取的变量的值为`v1.0.0`,但是`ARG`取得是设置的值`v2.0.1`,如果执行`docker build Dockerfile`那么`CONT_IMG_VER`的值就还是`v1.0.0`
+
 ## WORKDIR
 
 格式：`WORKDIR /path/to/workdir`
 
 当执行`RUN``CMD``ENTRYPOINT``ADD``CMD`等命令，设置工作目录
+
+## STOPSIGNAL
+
+格式：`STOPSIGNAL signal`
+
+`STOPSIGNAL`指令：发送signal信号给容器，让容器退出。
 
 ## .dockerignore
 
