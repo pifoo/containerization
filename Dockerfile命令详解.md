@@ -122,6 +122,17 @@ CMD ["param1", "param2"]
 
 - 使用`exec`格式，`docker run`传入的命令参数会覆盖`CMD`命令，并附加到`ENTRYPOINT`命令的参数中。推荐使用`exec`方式
 
+`ENTRYPOINT`和`CMD`的区别：
+
+```
+ | No ENTRYPOIT | ENTRYPOINT exec_entry p1_entry | ENTRYPOINT ["exec_entry" , "p1_entry"]
+ ------ | ------- | ------- | ------
+ No CMD | error,not allowed | /bin/sh -c exec_entry p1_entry | exec_entry p1_entry
+ CMD ["exec_cmd" , "p1_cmd"] | exec_cmd p1_cmd | /bin/sh -c exec_entry p1_entry exec_cmd p1_entry | exec_entry p1_entry exec_cmd p1_cmd
+ CMD ["p1_cmd" , "p2_cmd"] | p1_cmd p2_cmd | /bin/sh -c exec_entry p1_entry p1_cmd p2_cmd | exec_entry p1_entry p1_cmd p2_cmd
+ CMD exec_cmd p1_cmd | /bin/sh -c exec_cmd p1_cmd | /bin/sh -c exec_entry p1_entry /bin/sh -c exec_cmd p1_cmd | exec_entry p1_entry /bin/sh -c exec_cmd p1_cmd
+ ```
+
 ## ONBUILD
 
 格式：`ONBUILD [INSTRUCTION]`
