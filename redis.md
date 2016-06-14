@@ -93,42 +93,42 @@ NODES的意思是集群的每个节点，包括master和slave。所以如果有1
 
 #### 添加redis服务-选择镜像
 
-![https://github.com/billycyzhang/Shell/blob/master/images/image-1.jpg](镜像-1)
+![镜像-1](https://github.com/billycyzhang/Shell/blob/master/images/image-1.jpg)
 
 #### 设置容器参数
 
-![https://github.com/billycyzhang/Shell/blob/master/images/parameter-1.jpg](容器参数-1)
+![容器参数-1](https://github.com/billycyzhang/Shell/blob/master/images/parameter-1.jpg)
 
 #### 健康检查
 
-![https://github.com/billycyzhang/Shell/blob/master/images/check-1.jpg](健康检查-1)
+![健康检查-1](https://github.com/billycyzhang/Shell/blob/master/images/check-1.jpg)
 
 #### 部署策略
 
-![https://github.com/billycyzhang/Shell/blob/master/images/d-1.jpg](部署策略-1)
+![部署策略-1](https://github.com/billycyzhang/Shell/blob/master/images/d-1.jpg)
 
 ###### 添加redis集群初始化服务redis-trib-选择镜像
 
-![https://github.com/billycyzhang/Shell/blob/master/images/image-2.jpg](镜像-2)
+![镜像-2](https://github.com/billycyzhang/Shell/blob/master/images/image-2.jpg)
 
 ###### 设置容器参数
 
-![https://github.com/billycyzhang/Shell/blob/master/images/parameter-2.jpg](容器参数-2)
+![容器参数-2](https://github.com/billycyzhang/Shell/blob/master/images/parameter-2.jpg)
 
 ###### 部署策略
 
-![https://github.com/billycyzhang/Shell/blob/master/images/d-2.jpg](部署策略-2)
+![部署策略-2](https://github.com/billycyzhang/Shell/blob/master/images/d-2.jpg)
 
 **我们基于刚才的redis-sharding模版,就可以实现一键部署一个redis cluster出来**
 
-![https://github.com/billycyzhang/Shell/blob/master/images/app-i.jpg](应用实例)
+![应用实例](https://github.com/billycyzhang/Shell/blob/master/images/app-i.jpg)
 
 查看redis-trib集群初始化后的结果，我们看到集群的初始化过程都很正常。
 
-![https://github.com/billycyzhang/Shell/blob/master/images/i-result.jpg](初始化结果)
+![初始化结果](https://github.com/billycyzhang/Shell/blob/master/images/i-result.jpg)
 
 登录到任意一台redis节点执行redis-cli info:
 
-![https://github.com/billycyzhang/Shell/blob/master/images/result.jpg](最终结果)
+![最终结果](https://github.com/billycyzhang/Shell/blob/master/images/result.jpg)
 
 谢谢大家，我今天就分享到这里！
