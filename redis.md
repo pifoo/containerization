@@ -41,10 +41,13 @@ ADD entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [“/entrypoint.sh"]
 
+```
+
 脚本文件
 
 `cat entrypoint.sh`
 
+```
 #!/bin/sh
 
 if [ "$CLUSTER_CMD" = create ]; then
