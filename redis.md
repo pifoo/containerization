@@ -90,23 +90,23 @@ NODES的意思是集群的每个节点，包括master和slave。所以如果有1
 ## 编排集群
 准备好上述镜像和配置文件后，我们开始编排集群
 
-#### 创建模版
+#### 1.创建模版
 
 ![模板](https://github.com/billycyzhang/Shell/blob/master/images/tmp.jpg)
 
-#### 添加redis服务-选择镜像
+#### 2.添加redis服务-选择镜像
 
 ![镜像-1](https://github.com/billycyzhang/Shell/blob/master/images/image-1.jpg)
 
-#### 设置容器参数
+#### 3.设置容器参数
 
 ![容器参数-1](https://github.com/billycyzhang/Shell/blob/master/images/parameter-1.jpg)
 
-#### 健康检查
+#### 4.健康检查
 
 ![健康检查-1](https://github.com/billycyzhang/Shell/blob/master/images/check-1.jpg)
 
-#### 部署策略
+#### 5.部署策略
 
 ![部署策略-1](https://github.com/billycyzhang/Shell/blob/master/images/d-1.jpg)
 
@@ -114,11 +114,11 @@ NODES的意思是集群的每个节点，包括master和slave。所以如果有1
 
 ![镜像-2](https://github.com/billycyzhang/Shell/blob/master/images/image-2.jpg)
 
-###### 设置容器参数
+###### 1.设置容器参数
 
 ![容器参数-2](https://github.com/billycyzhang/Shell/blob/master/images/parameter-2.jpg)
 
-###### 部署策略
+###### 2.部署策略
 
 ![部署策略-2](https://github.com/billycyzhang/Shell/blob/master/images/d-2.jpg)
 
