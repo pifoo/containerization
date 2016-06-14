@@ -89,7 +89,7 @@ NODES的意思是集群的每个节点，包括master和slave。所以如果有1
 
 #### 创建模版
 
-![https://github.com/billycyzhang/Shell/blob/master/images/tmp.jpg](模板)
+![模板](https://github.com/billycyzhang/Shell/blob/master/images/tmp.jpg)
 
 #### 添加redis服务-选择镜像
 
