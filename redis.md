@@ -1,4 +1,4 @@
-大家好，我叫张春源，来着希云cSphere，我们主要是做企业级PaaS产品，致力于把容器技术真正落地到企业当中，感谢肖总提供这么好的技术交流平台让我们大家有机会一起交流实践容器的经验。
+大家好，我叫张春源，希云cSphere合伙人，现在公司主要是做企业级PaaS产品，致力于把容器技术真正落地到企业当中。非常感谢肖总提供这么好的技术交流平台让我们大家有机会一起交流实践容器的经验。
 
 我今天分享的主题是：如何利用容器实现生产级别的Redis sharding集群的一键交付
 
@@ -60,6 +60,7 @@ fi
 ## 准备配置文件
 
 #### 准备redis集群配置文件
+
 ```
 port 6379
 cluster-enabled yes
@@ -67,15 +68,19 @@ cluster-config-file nodes.conf
 cluster-node-timeout 5000
 appendonly yes
 ```
+
 redis集群的配置文件我们一般放到数据目录/data下，redis进程对/data目录拥有可读写的权限。
 
 #### 准备redis-trib脚本配置文件，用于集群初始化参数获取
+
 entrypoint.sh文件中，最主要的是读取redis-trib.conf配置文件，配置文件的格式非常简单
+
 ```
 REPLICAS={{.REPLICAS_NUM}}
 {{ $rs := service "redis" }}
 NODES="{{range $i,$rc := $rs.Containers}} {{$rc.IPAddr}}:6379{{end}}"
 ```
+
 REPLICAS的意思是每个分片有几个slave，一般配置1个slave ,即REPLICAS=1
 NODES的意思是集群的每个节点，包括master和slave。所以如果有10个节点，REPLICAS=1的话，那么将有5个分片(slices)。
 
@@ -84,10 +89,46 @@ NODES的意思是集群的每个节点，包括master和slave。所以如果有1
 
 #### 创建模版
 
-###### 添加redis集群初始化服务redis-trib
+![https://github.com/billycyzhang/Shell/blob/master/images/%E6%A8%A1%E6%9D%BF.jpg](模板)
+
+#### 添加redis服务-选择镜像
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F.jpg](镜像-1)
+
+#### 设置容器参数
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%AE%B9%E5%99%A8%E5%8F%82%E6%95%B0-1.jpg](容器参数-1)
+
+#### 健康检查
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5-1.jpg](健康检查-1)
+
+#### 部署策略
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E9%83%A8%E7%BD%B2%E7%AD%96%E7%95%A5-1.jpg](部署策略-1)
+
+###### 添加redis集群初始化服务redis-trib-选择镜像
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F-2.jpg](镜像-2)
+
+###### 设置容器参数
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%AE%B9%E5%99%A8%E5%8F%82%E6%95%B0-2.jpg](容器参数-2)
+
+###### 部署策略
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E9%83%A8%E7%BD%B2%E7%AD%96%E7%95%A5-2.jpg](部署策略-2)
 
 **我们基于刚才的redis-sharding模版,就可以实现一键部署一个redis cluster出来**
 
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B.jpg](应用实例)
+
 查看redis-trib集群初始化后的结果，我们看到集群的初始化过程都很正常。
 
+![https://github.com/billycyzhang/Shell/blob/master/images/%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BB%93%E6%9E%9C.jpg](初始化结果)
+
 登录到任意一台redis节点执行redis-cli info:
+
+![https://github.com/billycyzhang/Shell/blob/master/images/%E7%BB%93%E6%9E%9C.jpg](最终结果)
+
+谢谢大家，我今天就分享到这里！
