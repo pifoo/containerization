@@ -27,7 +27,7 @@ redis官方提供了一个ruby的脚本redis-trib.rb，这个脚本可以用来�
 
 以下是构建redis-trib镜像的Dockerfile内容：
 
-# cat Dockerfile
+`cat Dockerfile`
 
 ```
 FROM ruby:2.3.1-alpine
@@ -43,7 +43,7 @@ ENTRYPOINT [“/entrypoint.sh"]
 
 脚本文件
 
-# cat entrypoint.sh
+`cat entrypoint.sh`
 
 #!/bin/sh
 
