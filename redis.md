@@ -108,39 +108,39 @@ NODES="{{range $i,$rc := $rs.Containers}} {{$rc.IPAddr}}:6379{{end}}"
 
 #### 第一步：创建模版
 
-![模板](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBepMmBibhSYc1eiaGLobrxqsw8JAqKV4E9SAKYaOksibPqp4HM3TSczoA5g/0?wx_fmt=jpeg)
+![应用模板](https://github.com/billycyzhang/Shell/blob/master/images/application-template.jpg)
 
 #### 第二步：选择镜像，添加redis服务
 
-![镜像-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBewn4P1KKV1NiaCzoURW9vcqY73eMZLTLcGln5MfsKhcukibxwQbWf83gg/0?wx_fmt=jpeg)
+![镜像-1](https://github.com/billycyzhang/Shell/blob/master/images/select-image-1.jpg)
 
 #### 第三步：设置容器参数
 
-![容器参数-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeR6pQQUzS8qteccVQI7MuujUtgh7KhMd8zxfrX9tSkYZkfyrOoPSeuw/0?wx_fmt=jpeg)
+![容器参数-1](https://github.com/billycyzhang/Shell/blob/master/images/parameter-1.jpg)
 
 #### 第四步：设置健康检查策略
 
-![健康检查-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeiaVNRUdlWhCjOymmKbv8dWAkFrl2LCFCzOS37icticBjOpBGnVSmtdFTQ/0?wx_fmt=jpeg)
+![健康检查-1](https://github.com/billycyzhang/Shell/blob/master/images/health-check.jpg)
 
 #### 第五步：设置redis容器部署策略
 
-![部署策略-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBemUomTJibWDoAKK00hpGttJumA0XoyAolAyicVib1zuQLdqfRSjMH9nibrQ/0?wx_fmt=jpeg)
+![部署策略-1](https://github.com/billycyzhang/Shell/blob/master/images/deployment-strategy-1.jpg)
 
 ## 添加redis集群初始化服务redis-trib
 
 #### 第一步：选择镜像
 
-![镜像-2](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeloWBlTWac0RWrDaOtguxIW9ERVdGBWMpQBibicB0IhQ1quMp2AbFibTyw/0?wx_fmt=jpeg)
+![镜像-2](https://github.com/billycyzhang/Shell/blob/master/images/select-image-2.jpg)
 
 #### 第二步：设置容器参数
 
-![容器参数-2](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeaA3Y9DicHvU8KibBvuUU6PZH2RhPnAWIQS5XJw4lJFDtRC2jBvrysShQ/0?wx_fmt=jpeg)
+![容器参数-2](https://github.com/billycyzhang/Shell/blob/master/images/parameter-2.jpg)
 
 #### 第三步：设置redis-trib容器部署策略
 
 redis-trib要在redis容器启动完成后再启动，所以启动优先级要比redis低。
 
-![部署策略-2](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBePed0manQAlibGtLLIpbicHmqnTbKIaoicf9iaI8SLzk0otC2TXRYpnUmdw/0?wx_fmt=jpeg)
+![部署策略-2](https://github.com/billycyzhang/Shell/blob/master/images/deployment-strategy-2.jpg)
 
 通过以上步骤，编排好了Redis-sharding应用模版。
 
@@ -148,21 +148,22 @@ redis-trib要在redis容器启动完成后再启动，所以启动优先级要�
 
 以下是部署后的效果图：
 
-![应用实例](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBem2rTSPFYdNPwEKq1EiaHKcH56slvSadgXbqoYqmvR4cxeUvkb054hTw/0?wx_fmt=png)
+![应用实例](https://github.com/billycyzhang/Shell/blob/master/images/instances.jpg)
 
 #### 查看redis-trib集群初始化后的结果，看到集群的初始化过程没有问题；
 
-![初始化结果](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeJjBibYhqKZu4ibSKcvKFgRCQic4B5vVffFAqpQMGt2icOYgBLuibvVC3YPQ/0?wx_fmt=png)
+![初始化结果](https://github.com/billycyzhang/Shell/blob/master/images/return-result.jpg)
 
 #### 验证：登录到任意一台redis节点执行redis-cli info:
 
-![最终结果](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeibhYmzNXiaweA1RnfIDxiaZB5qb26Id78W4WzpdBpMmaMatLarRE9etxA/0?wx_fmt=png)
+![最终结果](https://github.com/billycyzhang/Shell/blob/master/images/validation-result.jpg)
 
 以上内容分享了基于进程的容器技术，实现了Redis sharding的一键交付。
 
 这个地方可以加个漫画....
 
 你会部署了吗？
+
 so easy
 
 #### 分享后讨论更是激烈：
