@@ -1,31 +1,48 @@
-大家好，我叫张春源，希云cSphere合伙人，现在公司主要是做企业级PaaS产品，致力于把容器技术真正落地到企业当中。非常感谢肖总提供这么好的技术交流平台让我们大家有机会一起交流实践容器的经验。
+如何使用容器实现生产级别的Redis sharding集群的一键交付
 
-我今天分享的主题是：如何利用容器实现生产级别的Redis sharding集群的一键交付
+![](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkiaCBCp2eyibGFK7BaE9TemcvRytUDrKH3w73Ybbmib2DMC6ibl7KlZG92PzBEc2froPrt6BREfWctUJg/0?wx_fmt=gif)
 
-Redis在很多公司中已经得到了大规模使用，今天我主要介绍Redis sharding跑在容器中的实践。
+## 作者介绍：
+
+> 张春源
+> 
+> 希云cSphere合伙人，国内早期的Docker布道者，对企业应用Docker化有丰富的实践经验，擅长利用Docker践行Devops文化。国内第一套Docker系列实战视频课程讲师，视频播放量累计10万+
+
+## 开篇：
+
+Redis在3.0之后开始支持sharding集群。Redis集群可以让数据自动在多个节点上分布。如何使用Docker实现Redis集群的一键部署交付，是一个有趣的并且有价值的话题。
+
+本文将给大家介绍基于进程的容器技术实现Redis sharding集群的一键部署，充分展现了容器的强大威力。
 
 ## 什么是Redis sharding集群
-Redis(redis.io)作为最流行的KV数据库，很长一段时间都是单机运行，关于如何实现Redis的数据在多个节点上的分布，在Redis3.0出来之前，有很多第三方的方案。
 
-建议大家参考这个链接。http://redis.io/topics/partitioning
+Redis(redis.io)作为最流行的KV数据库，很长一段时间都是单机运行，关于如何实现Redis的数据在多个节点上的分布，在Redis3.0出来之前，有很多第三方的方案。建议大家参考这个链接。http://redis.io/topics/partitioning
 
-#### Client hash
+## Client hash
+
 这是最简单的实现，通过在客户端利用一致性hash算法，将数据分布到不同节点。这种方法的缺点非常明显，缺少故障自动failover能力，并且在扩容时数据分布的搬迁，也比较费劲。
 
-#### 代理模式
+## 代理模式
+
 一个是Redis官方推荐的Twemproxy，是由twitter公司开发；另一个是国内豌豆荚开源的codis；代理模式最大的好处是仍然使用redis单机的sdk进行开发，维护简单。
 
-#### Redis Cluster
-redis3.0继2.8推出sentinel主从自动failover功能后，推出了sharding集群，这就是Redis Cluster，本次分享主要是介绍如何将Redis集群实现一键的部署。
-参考文档 http://redis.io/topics/cluster-tutorial
+## Redis Cluster
+
+redis3.0继2.8推出sentinel主从自动failover功能后，推出了sharding集群，这就是Redis Cluster。
+
+本次分享主要是介绍如何将Redis集群实现一键的部署。参考文档 http://redis.io/topics/cluster-tutorial
 
 ## 首先准备redis镜像
-Redis官方已经提供了Redis 3.2和3.3的镜像，都可以用来作为Redis集群的镜像，3.2是稳定版本。目前官方推出了alpine版本的Redis镜像，alpine镜像的优势是体积小。此次分享是采用官方的redis:3.2-alpine的镜像来做集群。
+
+Redis官方已经提供了Redis 3.2和3.3的镜像，都可以用来作为Redis集群的镜像，3.2是稳定版本。
+
+目前官方推出了alpine版本的Redis镜像，alpine镜像的优势是体积小。此次分享是采用官方的redis:3.2-alpine的镜像来做集群。
 
 ## 准备初始化脚本的执行环境
-redis官方提供了一个ruby的脚本redis-trib.rb，这个脚本可以用来初始化集群、resharding集群、rebalance集群等，我们使用官方的脚本来初始化集群。该脚本的运行需要ruby环境，我们来构建一个redis-trib镜像：
 
-以下是构建redis-trib镜像的Dockerfile内容：
+redis官方提供了一个ruby的脚本redis-trib.rb，这个脚本可以用来初始化集群、resharding集群、rebalance集群等。
+
+我们使用官方的脚本来初始化集群。该脚本的运行需要ruby环境，我们来构建一个redis-trib镜像，以下是构建redis-trib镜像的Dockerfile内容：
 
 `cat Dockerfile`
 
@@ -60,9 +77,7 @@ fi
 
 上面两个文件用来构建redis-trib镜像，Dockerfile中的逻辑比较简单，将github中的redis-trib.rb文件添加到镜像中，并让脚本执行支持非交互模式(QUIET_MODE)。镜像启动时，将执行集群初始化命令。
 
-## 准备配置文件
-
-#### 准备redis集群配置文件
+## 准备redis集群配置文件
 
 ```
 port 6379
@@ -74,7 +89,7 @@ appendonly yes
 
 redis集群的配置文件我们一般放到数据目录/data下，redis进程对/data目录拥有可读写的权限。
 
-#### 准备redis-trib脚本配置文件，用于集群初始化参数获取
+### 准备redis-trib脚本配置文件，用于集群初始化参数获取
 
 entrypoint.sh文件中，最主要的是读取redis-trib.conf配置文件，配置文件的格式非常简单
 
@@ -84,57 +99,73 @@ REPLICAS={{.REPLICAS_NUM}}
 NODES="{{range $i,$rc := $rs.Containers}} {{$rc.IPAddr}}:6379{{end}}"
 ```
 
-REPLICAS的意思是每个分片有几个slave，一般配置1个slave ,即REPLICAS=1
-NODES的意思是集群的每个节点，包括master和slave。所以如果有10个节点，REPLICAS=1的话，那么将有5个分片(slices)。
+**REPLICAS**的意思是每个分片有几个slave，一般配置1个slave ,即REPLICAS=1
+**NODES**的意思是集群的每个节点，包括master和slave。所以如果有10个节点，REPLICAS=1的话，那么将有5个分片(slices)。
 
 ## 编排集群
+
 准备好上述镜像和配置文件后，我们开始编排集群
 
-#### 1.创建模版
+#### 第一步：创建模版
 
-![模板](https://github.com/billycyzhang/Shell/blob/master/images/tmp.jpg)
+![模板](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBepMmBibhSYc1eiaGLobrxqsw8JAqKV4E9SAKYaOksibPqp4HM3TSczoA5g/0?wx_fmt=jpeg)
 
-#### 2.添加redis服务-选择镜像
+#### 第二步：选择镜像，添加redis服务
 
-![镜像-1](https://github.com/billycyzhang/Shell/blob/master/images/image-1.jpg)
+![镜像-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBewn4P1KKV1NiaCzoURW9vcqY73eMZLTLcGln5MfsKhcukibxwQbWf83gg/0?wx_fmt=jpeg)
 
-#### 3.设置容器参数
+#### 第三步：设置容器参数
 
-![容器参数-1](https://github.com/billycyzhang/Shell/blob/master/images/parameter-1.jpg)
+![容器参数-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeR6pQQUzS8qteccVQI7MuujUtgh7KhMd8zxfrX9tSkYZkfyrOoPSeuw/0?wx_fmt=jpeg)
 
-#### 4.健康检查
+#### 第四步：设置健康检查策略
 
-![健康检查-1](https://github.com/billycyzhang/Shell/blob/master/images/check-1.jpg)
+![健康检查-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeiaVNRUdlWhCjOymmKbv8dWAkFrl2LCFCzOS37icticBjOpBGnVSmtdFTQ/0?wx_fmt=jpeg)
 
-#### 5.部署策略
+#### 第五步：设置redis容器部署策略
 
-![部署策略-1](https://github.com/billycyzhang/Shell/blob/master/images/d-1.jpg)
+![部署策略-1](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBemUomTJibWDoAKK00hpGttJumA0XoyAolAyicVib1zuQLdqfRSjMH9nibrQ/0?wx_fmt=jpeg)
 
-###### 添加redis集群初始化服务redis-trib-选择镜像
+## 添加redis集群初始化服务redis-trib
 
-![镜像-2](https://github.com/billycyzhang/Shell/blob/master/images/image-2.jpg)
+#### 第一步：选择镜像
 
-###### 1.设置容器参数
+![镜像-2](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeloWBlTWac0RWrDaOtguxIW9ERVdGBWMpQBibicB0IhQ1quMp2AbFibTyw/0?wx_fmt=jpeg)
 
-![容器参数-2](https://github.com/billycyzhang/Shell/blob/master/images/parameter-2.jpg)
+#### 第二步：设置容器参数
 
-###### 2.部署策略
+![容器参数-2](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeaA3Y9DicHvU8KibBvuUU6PZH2RhPnAWIQS5XJw4lJFDtRC2jBvrysShQ/0?wx_fmt=jpeg)
 
-![部署策略-2](https://github.com/billycyzhang/Shell/blob/master/images/d-2.jpg)
+#### 第三步：设置redis-trib容器部署策略
 
-**我们基于刚才的redis-sharding模版,就可以实现一键部署一个redis cluster出来**
+redis-trib要在redis容器启动完成后再启动，所以启动优先级要比redis低。
 
-![应用实例](https://github.com/billycyzhang/Shell/blob/master/images/app-i.jpg)
+![部署策略-2](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBePed0manQAlibGtLLIpbicHmqnTbKIaoicf9iaI8SLzk0otC2TXRYpnUmdw/0?wx_fmt=jpeg)
 
-查看redis-trib集群初始化后的结果，我们看到集群的初始化过程都很正常。
+通过以上步骤，编排好了Redis-sharding应用模版。
 
-![初始化结果](https://github.com/billycyzhang/Shell/blob/master/images/i-result.jpg)
+## 基于Redis-sharding应用模板，一键部署Redis Cluster
 
-登录到任意一台redis节点执行redis-cli info:
+以下是部署后的效果图：
 
-![最终结果](https://github.com/billycyzhang/Shell/blob/master/images/result.jpg)
+![应用实例](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBem2rTSPFYdNPwEKq1EiaHKcH56slvSadgXbqoYqmvR4cxeUvkb054hTw/0?wx_fmt=png)
 
-谢谢大家，我今天就分享到这里！
+#### 查看redis-trib集群初始化后的结果，看到集群的初始化过程没有问题；
+
+![初始化结果](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeJjBibYhqKZu4ibSKcvKFgRCQic4B5vVffFAqpQMGt2icOYgBLuibvVC3YPQ/0?wx_fmt=png)
+
+#### 验证：登录到任意一台redis节点执行redis-cli info:
+
+![最终结果](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkjQv8MGauicFzAfFyK2V5xBeibhYmzNXiaweA1RnfIDxiaZB5qb26Id78W4WzpdBpMmaMatLarRE9etxA/0?wx_fmt=png)
+
+以上内容分享了基于进程的容器技术，实现了Redis sharding的一键交付。
+
+这个地方可以加个漫画....
+
+你会部署了吗？
+so easy
+
+#### 分享后讨论更是激烈：
 
 Q1: 如果我想在一个机器上部署多个redis实例可以吗？
 A1: 可以
@@ -165,3 +196,5 @@ A8：不同类型的应用有不同的资源偏好，比如CPU密集型的，磁
 
 Q9: redis用docker做集群，在内存方面有什么需要额外注意的地方吗？
 A9：内存方面注意设置内核vm相关参数，另外配置文件里可以加入内存最大大小的设置等，如果要自动化，可以自动获取容器的内存配额或主机节点的内存size自动计算
+
+下次我们相约在6月21日周二晚20:00，将由给Docker官方源码全球排名前50名的魏世江（希云CTO）给我们来分享更深层次的容器技术，欢迎大家继续关注！
