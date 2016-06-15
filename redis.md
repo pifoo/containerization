@@ -1,6 +1,4 @@
-如何使用容器实现生产级别的Redis sharding集群的一键交付
-
-![](https://mmbiz.qlogo.cn/mmbiz/ibxUwW9RpKkiaCBCp2eyibGFK7BaE9TemcvRytUDrKH3w73Ybbmib2DMC6ibl7KlZG92PzBEc2froPrt6BREfWctUJg/0?wx_fmt=gif)
+# 如何使用容器实现生产级别的Redis sharding集群的一键交付
 
 ## 作者介绍：
 
