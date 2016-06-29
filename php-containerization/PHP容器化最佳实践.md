@@ -117,7 +117,7 @@ Connected to mysql: db via TCP/IP
 
 - 创建私有Docker Registry
 
-在通过cSphere的镜像仓库页面，点击`新建镜像仓库`按钮，根据提示即可成功创建一个私有的镜像仓库.
+  在通过cSphere的镜像仓库页面，点击`新建镜像仓库`按钮，根据提示即可成功创建一个私有的镜像仓库.
 
 ![create-registry](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/create-registry.png)
 
