@@ -6,7 +6,7 @@
 
 PHP官方在 hub.docker.com 上维护了官方的PHP Docker镜像，包含了从PHP 5.5到7.0的多种不同版本的镜像。
 
-![php-images-version]()
+![php-images-version](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/php-image-version.png)
 
 我们将以PHP官方的Docker镜像为基础，介绍如何将一个简单的PHP应用Docker化。
 
@@ -119,25 +119,25 @@ Connected to mysql: db via TCP/IP
 
 在通过cSphere的镜像仓库页面，点击`新建镜像仓库`按钮，根据提示即可成功创建一个私有的镜像仓库.
 
-![create-registry]()
+![create-registry](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/create-registry.png)
 
 - 配置项目
 
 进入上一步创建的镜像仓库页面，点击`添加自动构建`按钮，填写项目的 Git 仓库地址和Dockerfile路径：
 
-![add-auto-build]()
+![add-auto-build](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/add-auto-build.png)
 
 然后根据提示，设置镜像构建后，在镜像仓库的存放位置，和需要进行自动构建的分支：
 
-![add-brach]()
+![setting-brach](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/seeting-brach.png)
 
 - 设置项目的Web Hook和 Deploy key
 
-![setting-deploy-key]()
+![setting-deploy-key](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/seeting-deploy-key.png)
 
 根据提示，为项目设置好Webhook和Deploy Key. 这样当项目有新的代码push到上一步中设置的分支之后，私有Docker Registry就会进行镜像的自动构建, 在构建成功之后，自动将镜像Push到镜像仓库的指定位置
 
-![auto-build]()
+![auto-build](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/auto-build.png)
 
 ## 使用cSphere部署和管理PHP应用
 
@@ -147,7 +147,7 @@ Connected to mysql: db via TCP/IP
 
 进入cSphere的应用模板页面，点击`创建新模板`按钮，根据提示新建一个应用模板
 
-![create-template]()
+![create-template](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/create-template.png)
 
 - 添加MySQL服务
 
@@ -159,11 +159,11 @@ docker run --name db -e MYSQL_ROOT_PASSWORD=secret -d mysql:5.6
 
 这时我们把上述命令配置成应用模板中的一个服务：`db`
 
-![add-da-service]()
+![add-db-service](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/add-db-service.png)
 
 同时设置好环境变量
 
-![setting-environment]()
+![setting-environment](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/setting-environment.png)
 
 - 添加PHP服务
 
@@ -176,34 +176,34 @@ docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app
 同时，我们在自动构建镜像中，设置了自动构建镜像为 `192.168.1.130/tsing/php-mysql-app:latest`
 这里我们把上述信息配置成应用模板的另一服务：`php`
 
-![create-php-service]()
+![create-php-service](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/create-php-service.png)
 
 设置PHP代码中使用的环境变量值
 
-![setting-php-environment]()
+![setting-php-environment](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/setting-php-environment.png)
 
 `--link db` 这个参数无需在应用模板中设置，因为cSphere应用管理会自动根据服务的名称，自动处理不同容器的连接关系。
 `-p` 端口映射也不需要设置，因为cSphere应用管理创建的容器都有独立的IP，不再需要把容器的端口映射到主机上
 
 - 保存模板
 
-![save-template]()
+![save-template](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/save-template.png)
 
 - 部署应用
 
 点击上一步刚刚创建成功的模板版本，最右边的部署按钮，便可以开始进行部署。
 
-![deploy-application]()
+![deploy-application](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/deploy-application.png)
 
 在这个界面中，你可以选择将应用部署到哪一个主机分组中, 可以根据需要，把应用部署到开发、测试、生产不同环境的主机上。当然，也可以在一个环境部署多个实例, 这些实例之间是互相隔离的。
 
-![denploy-instance]()
+![denploy-instance](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/deployed-instance.png)
 
 - 应用模板管理
 
 在应用模板页面，你可以对应用模板进行修改，每次模板的修改都会产生一个新的版本，方便进行升级和回滚。
 
-![application-template]()
+![application-template](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/application-template.png)
 
 - 应用管理
 
@@ -211,7 +211,7 @@ docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app
 
 点击升级 `· 回滚按钮`，可以快速将应用更新至指定版本的模板
 
-![update-adn-rollback]()
+![update-and-rollback](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/update-and-rollback.png)
 
 ## 应用部署自动化
 
