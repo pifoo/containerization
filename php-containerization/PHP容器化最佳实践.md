@@ -62,8 +62,6 @@ Hello Docker!
 
 - 创建一个新的目录 php-mysql 作为我们的项目目录
 
-- 创建一个新的目录 php-mysql 作为我们的项目目录
-
 ```
 <?php
  $mysql = new mysqli('db', 'root', $_ENV['MYSQL_ROOT_PASSWORD']);
