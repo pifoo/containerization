@@ -1,0 +1,20 @@
+db:
+  container_name: my-db-server
+  image: csphere/mariadb:5.5
+  ports: 
+    - "3306:3306"
+  volumes:
+    - "/db-data:/var/lib/mysql"
+  environment:
+    - DB_USER=myuser
+    - DB_PASS=mypass
+
+web:
+  container_name: my-app
+  image: csphere/wordpress:4.3
+  ports:
+    - "80:80"
+  environment:
+    - WORDPRESS_DB_USER=myuser
+    - WORDPRESS_DB_PASSWORD=mypass
+    - WORDPRESS_DB_HOST=192.168.42.1
