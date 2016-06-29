@@ -38,17 +38,23 @@ CMD ["php", "./app.php"]
 
 - 构建镜像
 
-`docker build -t php-app .`
+```
+docker build -t php-app .
+```
 
 这将会生成一个名为 `php-app` 的镜像
 
 - 运行容器
 
-`docker run php-app`
+```
+docker run php-app
+```
 
 这时候，容器将会执行我们之前创建的 `app.php`， 并输出：
 
-`Hello Docker!`
+```
+Hello Docker!
+```
 
 ## PHP + MySQL 的Docker化示例
 
@@ -81,11 +87,15 @@ COPY . /var/www/html
 
 - 构建镜像
 
-`docker build -t php-mysql-app .`
+```
+docker build -t php-mysql-app .
+```
 
 - 创建 MySQL 容器
 
-`docker run --name db -e MYSQL_ROOT_PASSWORD=secret -d mysql:5.6`
+```
+docker run --name db -e MYSQL_ROOT_PASSWORD=secret -d mysql:5.6
+```
 
 我们在这里使用官方的 `mysql:5.6` 镜像创建了一个 MySQL 的容器
 
@@ -97,7 +107,9 @@ COPY . /var/www/html
 
 - 启动 PHP 容器，并将其连接到 MySQL 容器
 
-`docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app`
+```
+docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app
+```
 
 我们运行了之前构建的 `php-mysql-app` 镜像，并将上一步创建的 `mysql-instance` 这个MySQL容器和它连接，同时我们把MySQL的root密码通过环境变量`MYSQL_ROOT_PASSWORD` 传到容器内部`-p 8080:80` 将容器的 `80` 端口映射到了主机的 `8080` 端口
 
