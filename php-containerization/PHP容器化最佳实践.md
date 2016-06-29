@@ -123,7 +123,7 @@ Connected to mysql: db via TCP/IP
 
 - 配置项目
 
-进入上一步创建的镜像仓库页面，点击`添加自动构建`按钮，填写项目的 Git 仓库地址和Dockerfile路径：
+  进入上一步创建的镜像仓库页面，点击`添加自动构建`按钮，填写项目的 Git 仓库地址和Dockerfile路径：
 
 ![add-auto-build](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/add-auto-build.png)
 
@@ -145,13 +145,13 @@ Connected to mysql: db via TCP/IP
 
 - 创建应用模板
 
-进入cSphere的应用模板页面，点击`创建新模板`按钮，根据提示新建一个应用模板
+  进入cSphere的应用模板页面，点击`创建新模板`按钮，根据提示新建一个应用模板
 
 ![create-template](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/create-template.png)
 
 - 添加MySQL服务
 
-在之前的PHP + MySQL 项目Docker化示例中，我们通过以下的命令启动了MySQL容器:
+  在之前的PHP + MySQL 项目Docker化示例中，我们通过以下的命令启动了MySQL容器:
 
 ```
 docker run --name db -e MYSQL_ROOT_PASSWORD=secret -d mysql:5.6
@@ -167,23 +167,23 @@ docker run --name db -e MYSQL_ROOT_PASSWORD=secret -d mysql:5.6
 
 - 添加PHP服务
 
-在 PHP + MySQL 项目Docker化示例中，我们通过以下的命令启动了PHP容器:
+  在 PHP + MySQL 项目Docker化示例中，我们通过以下的命令启动了PHP容器:
 
 ```
 docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app
 ```
 
-同时，我们在自动构建镜像中，设置了自动构建镜像为 `192.168.1.130/tsing/php-mysql-app:latest`
-这里我们把上述信息配置成应用模板的另一服务：`php`
+  同时，我们在自动构建镜像中，设置了自动构建镜像为 `192.168.1.130/tsing/php-mysql-app:latest`
+  这里我们把上述信息配置成应用模板的另一服务：`php`
 
 ![create-php-service](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/create-php-service.png)
 
-设置PHP代码中使用的环境变量值
+  设置PHP代码中使用的环境变量值
 
 ![setting-php-environment](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/setting-php-environment.png)
 
-`--link db` 这个参数无需在应用模板中设置，因为cSphere应用管理会自动根据服务的名称，自动处理不同容器的连接关系。
-`-p` 端口映射也不需要设置，因为cSphere应用管理创建的容器都有独立的IP，不再需要把容器的端口映射到主机上
+  `--link db` 这个参数无需在应用模板中设置，因为cSphere应用管理会自动根据服务的名称，自动处理不同容器的连接关系。
+  `-p` 端口映射也不需要设置，因为cSphere应用管理创建的容器都有独立的IP，不再需要把容器的端口映射到主机上
 
 - 保存模板
 
@@ -191,7 +191,7 @@ docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app
 
 - 部署应用
 
-点击上一步刚刚创建成功的模板版本，最右边的部署按钮，便可以开始进行部署。
+  点击上一步刚刚创建成功的模板版本，最右边的部署按钮，便可以开始进行部署。
 
 ![deploy-application](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/deploy-application.png)
 
@@ -201,15 +201,16 @@ docker run --link db -e MYSQL_ROOT_PASSWORD=secret -p 8080:80 php-mysql-app
 
 - 应用模板管理
 
-在应用模板页面，你可以对应用模板进行修改，每次模板的修改都会产生一个新的版本，方便进行升级和回滚。
+  在应用模板页面，你可以对应用模板进行修改，每次模板的修改都会产生一个新的版本，方便进行升级和回滚。
 
 ![application-template](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/application-template.png)
 
 - 应用管理
+ 
+  在应用实例的页面，你可以对应用实例进行管理, 对应用的服务进行扩容，重启
+![application-instance](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/instance-list.png)
 
-在应用实例的页面，你可以对应用实例进行管理, 对应用的服务进行扩容，重启
-
-点击升级 `· 回滚按钮`，可以快速将应用更新至指定版本的模板
+  点击升级 `· 回滚按钮`，可以快速将应用更新至指定版本的模板
 
 ![update-and-rollback](https://github.com/billycyzhang/Shell/blob/master/php-containerization/images/update-and-rollback.png)
 
