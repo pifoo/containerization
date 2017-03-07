@@ -28,7 +28,7 @@ Role=agent ControllerAddr=192.168.122.10:80 InstCode=6906 NetMode=ipvlan InetDev
 - `ControllerAddr`: 管理节点的`地址`:`端口`(192.168.1.2:80)
 - `InstCode`: 安装码, 生成验证码请按照`5.1步骤`进行操作
 - `NetMode`: Docker容器网络模式, 填写ipvlan
-- `InetDev`: 物理网卡名
+- `InetDev`: 物理网卡名，替换成实际网卡的名称
 
 ## 5.4 启动Agent
 
