@@ -1,11 +1,11 @@
 # 希云cSphere在VMWare平台上安装部署文档
 
-## 操作系统配置
+## 1.操作系统配置
 
-## 系统硬盘及分区设置
+## 2.网络规划
 
-## 网络规划
+## 3.系统硬盘及分区设置
 
-## 安装cSphere Controller管理节点
+## 4.安装cSphere Controller管理节点
 
-## 安装cSphere Agent计算节点
+## 5.安装cSphere Agent计算节点
