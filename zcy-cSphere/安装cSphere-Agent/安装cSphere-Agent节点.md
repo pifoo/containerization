@@ -16,6 +16,14 @@ COS验证码是Agent加入管理节点的口令，生成COS验证码操作步骤
 
 *前提*：将csphere-agent的rpm包上传至服务器
 
+```
+#安装依赖包,提前将iproute rpm包传到agent节点上
+rpm -Uvh iproute-4.1.1-3.fc23.x86_64.rpm --nodeps
+
+#安装Agent rpm包
+rpm -ivh csphere-agent-1.5.6-rhel7.x86_64.rpm
+```
+
 ## 5.3 初始化Agent
 
 `VMWare`平台网络要选择`IPVlan`模式进行初始化
