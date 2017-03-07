@@ -18,10 +18,7 @@ Role=controller ClusterSize=1 Port=80 MongoRepl=NO csphere_init
 
 ```
 参数解析：
-ClusterSize:是Agent节点中的Etcd服务集群节点数，测试环境设置成1或3，如果设置成3 Agent节点要将3台**都安装完毕后集群才能建成**。
-
-*demo环境可以设置成1*
-
+ClusterSize:是Agent节点中的Etcd服务集群节点数，测试环境设置成1或3，如果设置成3 Agent节点要将3台都安装完毕后集群才能建成,demo环境可以设置成1。
 Port：通过浏览器访问管理节点的Web页面的Http端口,标准配置是80。
 MongoRepl:是否将控制器部署成集群模式
 ```
