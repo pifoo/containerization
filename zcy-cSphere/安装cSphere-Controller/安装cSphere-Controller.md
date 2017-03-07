@@ -9,7 +9,7 @@ rpm -ivh csphere-controller-1.5.6-rhel7.x86_64.rpm
 ```
 ## 4.2 初始化Controller
 
-执行以下命令之前请先阅读特别提示：
+执行以下命令之前请先阅读**特别提示**：
 
 ```
 Role=controller ClusterSize=1 Port=80 MongoRepl=NO csphere_init
@@ -18,12 +18,12 @@ Role=controller ClusterSize=1 Port=80 MongoRepl=NO csphere_init
 
 ```
 参数解析：
-`ClusterSize`:是`Agent`节点中的`Etcd`服务集群节点数，测试环境设置成`1`或`3`，如果设置成`3``Agent`节点要将`3`台**都安装完毕后集群才能建成**。
+ClusterSize:是Agent节点中的Etcd服务集群节点数，测试环境设置成1或3，如果设置成3 Agent节点要将3台**都安装完毕后集群才能建成**。
 
 *demo环境可以设置成1*
 
-`Port`：通过浏览器访问管理节点的Web页面的Http端口,标准配置是`80`。
-`MongoRepl`:是否将控制器部署成集群模式
+Port：通过浏览器访问管理节点的Web页面的Http端口,标准配置是80。
+MongoRepl:是否将控制器部署成集群模式
 ```
 # 4.3 启动Controller
 
@@ -42,7 +42,7 @@ cspherectl  start
 
 ## 4.4.3 添加用户
 
-安装完成后，需要注册第一个用户，并设置密码至`8`位
+安装完成后，需要注册第一个用户，并设置密码至少`8`位
 
 ## 4.4.4 申请license
 
@@ -56,4 +56,4 @@ cspherectl  start
 
 拿到企业版license后，点击左侧菜单栏`系统设置`-->`License`-->`更换License`-->`添加`
 
-到此`管理节点`安装完毕！
+> 到此`管理节点`安装完毕！
